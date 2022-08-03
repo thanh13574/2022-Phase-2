@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Pokemon } from "pokenode-ts";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import "./App.css";
@@ -21,7 +21,7 @@ function App() {
             id="search-bar"
             className="text"
             value={pokemonName}
-            onChange={(prop) => {
+            onChange={(prop: { target: { value: SetStateAction<string>; }; }) => {
               setPokemonName(prop.target.value);
             }}
             label="Enter a Pokémon Name..."
