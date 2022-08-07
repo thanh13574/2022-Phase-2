@@ -5,12 +5,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import "./App.css";
 import { Box, Button, Grid, Paper, Skeleton } from "@mui/material";
+import FBGraphAPI from "fb-graph-api";
 
 function App() {
   const [pokemonName, setPokemonName] = useState("");
   const [pokemonInfo, setPokemonInfo] = useState<null | undefined | Pokemon>(
     undefined
   );
+  const FB = new FBGraphAPI({
+    clientID: '794846895035501',
+    clientSecret: '6f6f4edfd5093637817be22d9a71cf8d',
+    appAccessToken: 'EAALS6LbUVG0BANRhnzCdSmnYHNoAihRj1MMZAsxUQ26W0XvAVsjXWNOnSw1lF9GegL4XoTsqCsmglKmjqU8Q3DtpOLLIZB0uanipZCAyzZCZBZBVKavyZCRZB4n8UZACAib7W3iFZC4mtNs8vV6eDyZCsyus7265gk4SMkB5D7IUTL1ZAoU7IMldscBa' // Optional
+});
+
+
   const POKEMON_BASE_API_URL = "https://pokeapi.co/api/v2";
   return (
     <div>
@@ -37,6 +45,23 @@ function App() {
             <SearchIcon style={{ fill: "blue" }} />
             Search
           </Button>
+          
+          <Button
+            onClick={() => {
+              FB.api(
+                '/106382945508638/feed',
+                'POST',
+                {"message":"Testing post status#1"},
+                function(response) {
+                    // Insert your code here
+                }
+              );
+            }}
+          >
+            <SearchIcon style={{ fill: "blue" }} />
+            Search
+          </Button>
+          
         </div>
       </div>
 
