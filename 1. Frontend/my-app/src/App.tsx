@@ -5,19 +5,18 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import "./App.css";
 import { Box, Button, Grid, Paper, Skeleton } from "@mui/material";
-import FBGraphAPI from "fb-graph-api";
 
 function App() {
   const [pokemonName, setPokemonName] = useState("");
   const [pokemonInfo, setPokemonInfo] = useState<null | undefined | Pokemon>(
     undefined
   );
-  const FB = new FBGraphAPI({
-    clientID: '794846895035501',
-    clientSecret: '6f6f4edfd5093637817be22d9a71cf8d',
-    appAccessToken: 'EAALS6LbUVG0BANRhnzCdSmnYHNoAihRj1MMZAsxUQ26W0XvAVsjXWNOnSw1lF9GegL4XoTsqCsmglKmjqU8Q3DtpOLLIZB0uanipZCAyzZCZBZBVKavyZCRZB4n8UZACAib7W3iFZC4mtNs8vV6eDyZCsyus7265gk4SMkB5D7IUTL1ZAoU7IMldscBa' // Optional
-});
 
+  <>
+  <div id="fb-root"></div>
+  <div id="fb-root"></div>
+  <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0&appId=794846895035501&autoLogAppEvents=1" nonce="VkQCtggd"></script>
+  </>
 
   const POKEMON_BASE_API_URL = "https://pokeapi.co/api/v2";
   return (
@@ -40,22 +39,6 @@ function App() {
           <Button
             onClick={() => {
               search();
-            }}
-          >
-            <SearchIcon style={{ fill: "blue" }} />
-            Search
-          </Button>
-          
-          <Button
-            onClick={() => {
-              FB.api(
-                '/106382945508638/feed',
-                'POST',
-                {"message":"Testing post status#1"},
-                function(response) {
-                    // Insert your code here
-                }
-              );
             }}
           >
             <SearchIcon style={{ fill: "blue" }} />
@@ -106,6 +89,9 @@ function App() {
                         <br />
                         Abilities: {getAbilities()?.toString()}
                       </p>
+
+                      <div className="fb-share-button" data-href="https://www.pokemon.com/us/pokedex/" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.pokemon.com%2Fus%2Fpokedex%2F&amp;src=sdkpreparse" className="fb-xfbml-parse-ignore">Share</a></div>
+
                     </div>
                   )}
                 </Box>
