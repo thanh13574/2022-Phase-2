@@ -1,181 +1,81 @@
-import axios from "axios";
-import { Pokemon } from "pokenode-ts";
-import { SetStateAction, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import TextField from "@mui/material/TextField";
-import "./App.css";
-import { Box, Button, Grid, Paper, Skeleton } from "@mui/material";
+import './App.css';
+import { useState } from "react";
 
 function App() {
-  const [pokemonName, setPokemonName] = useState("");
-  const [pokemonInfo, setPokemonInfo] = useState<null | undefined | Pokemon>(
-    undefined
-  );
+  // Declare a new state variable, which we'll call "pokemonName"
+  const [joke, setJoke] = useState("");
+  const [jokeNumber, setJokeNumber] = useState("");
+  const [jokeInfo, setJokeInfo] = useState<undefined | any>(undefined);
 
-  <>
-  <div id="fb-root"></div>
-  <div id="fb-root"></div>
-  <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0&appId=794846895035501&autoLogAppEvents=1" nonce="VkQCtggd"></script>
-  </>
 
-  const POKEMON_BASE_API_URL = "https://pokeapi.co/api/v2";
+  const axios = require("axios");
+
+  const options = 
+  {
+    method: 'GET',
+    url: 'https://webknox-jokes.p.rapidapi.com/jokes/search',
+    params: {
+      keywords: joke,
+      numJokes: jokeNumber,
+      category: '',
+      minRating: ''
+    },
+    headers: {
+      'X-RapidAPI-Key': '77f96a77ffmshbf3de61e1538fddp15ae28jsn9b5ca1a6295e',
+      'X-RapidAPI-Host': 'webknox-jokes.p.rapidapi.com'
+    }
+  };
+
   return (
     <div>
-      <div className="search-field">
-        <h1>Pokédex Search</h1>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <TextField
-            id="search-bar"
-            className="text"
-            value={pokemonName}
-            onChange={(prop: { target: { value: SetStateAction<string>; }; }) => {
-              setPokemonName(prop.target.value);
-            }}
-            label="Enter a Pokémon Name..."
-            variant="outlined"
-            placeholder="Search..."
-            size="medium"
-          />
-          <Button
-            onClick={() => {
-              search();
-            }}
-          >
-            <SearchIcon style={{ fill: "blue" }} />
-            Search
-          </Button>
-          
-        </div>
+      <h1>Joke Databse</h1>
+
+      <div>
+        <label>Keyword/ID:</label>
+        <input
+          type="text"
+          id="joke"
+          name="entered_joke"
+          onChange={(e) => setJoke(e.target.value)}
+        />
+        <br/>
+        <label>Number of jokes:</label>
+        <input
+          type="int"
+          id="joke_number"
+          name="entered_number"
+          onChange={(e) => setJokeNumber(e.target.value)}
+        />
+        <br/>
+        <button onClick={search}>Search</button>
       </div>
 
-      {pokemonInfo === undefined ? (
-        <div></div>
-      ) : (
-        <div
-          id="pokemon-result"
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto",
-            padding: "100px 10px 0px 10px",
-          }}
-        >
-          <Paper sx={{ backgroundColor: getBackColor(pokemonInfo) }}>
-            <Grid
-              container
-              direction="row"
-              spacing={5}
-              sx={{
-                justifyContent: "center",
-              }}
-            >
-              <Grid item>
-                <Box>
-                  {pokemonInfo === undefined || pokemonInfo === null ? (
-                    <h1> Pokemon not found</h1>
-                  ) : (
-                    <div>
-                      <h1>
-                        {pokemonInfo.name.charAt(0).toUpperCase() +
-                          pokemonInfo.name.slice(1)}
-                      </h1>
-                      <p>
-                        ID: {pokemonInfo.id}
-                        <br />
-                        Height: {pokemonInfo.height * 10} cm
-                        <br />
-                        Weight: {pokemonInfo.weight / 10} kg
-                        <br />
-                        Types: {getTypes()?.toString()}
-                        <br />
-                        Abilities: {getAbilities()?.toString()}
-                      </p>
-
-                      <div className="fb-share-button" data-href="https://www.pokemon.com/us/pokedex/" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.pokemon.com%2Fus%2Fpokedex%2F&amp;src=sdkpreparse" className="fb-xfbml-parse-ignore">Share</a></div>
-
-                    </div>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box>
-                  {pokemonInfo?.sprites.other.dream_world.front_default ? (
-                    <img
-                      height="300px"
-                      width="300px"
-                      alt={pokemonInfo.name}
-                      src={pokemonInfo.sprites.other.dream_world.front_default}
-                    ></img>
-                  ) : (
-                    <Skeleton width={300} height={300} />
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Paper>
-        </div>
-      )}
+      <p>You have entered {joke}</p>
     </div>
   );
 
-  // Credit to codingsparkles for providing the color mapping
-  function getBackColor(poke: Pokemon | undefined | null) {
-    let backColor = "#EEE8AA";
-    if (poke === undefined || poke === null) {
-      return backColor;
-    }
-    const pokeTypes = poke.types.map((i) => i.type.name);
-    if (pokeTypes.includes("fire")) {
-      backColor = "#FEC5BB";
-    } else if (pokeTypes.includes("grass")) {
-      backColor = "#80FFDB";
-    } else if (pokeTypes.includes("water")) {
-      backColor = "#DFE7FD";
-    } else if (pokeTypes.includes("bug")) {
-      backColor = "#B0DEA3";
-    } else if (pokeTypes.includes("normal")) {
-      backColor = "#E0FFFF";
-    } else if (pokeTypes.includes("electric")) {
-      backColor = "#D8E2DC";
-    } else if (pokeTypes.includes("ground")) {
-      backColor = "#FAD2E1";
-    } else if (pokeTypes.includes("fairy")) {
-      backColor = "#FFF1E6";
-    } else if (pokeTypes.includes("ghost")) {
-      backColor = "#F8EDEB";
-    } else if (pokeTypes.includes("fighting")) {
-      backColor = "#F1FAEE";
-    } else if (pokeTypes.includes("rock")) {
-      backColor = "#A8DADC";
-    }
-    return backColor;
-  }
-
   function search() {
-    console.log(pokemonName);
-    if (pokemonName === undefined || pokemonName === "") {
-      return;
-    }
+    //@ts-ignore
+    axios.request(options).then(function (response) {
+      console.log(response.data);
+      document.write("Found it!");
+      document.write("<br>");
+      document.write("<br>");
 
-    axios
-      .get(POKEMON_BASE_API_URL + "/pokemon/" + pokemonName?.toLowerCase())
-      .then((res) => {
-        setPokemonInfo(res.data);
-      })
-      .catch(() => {
-        setPokemonInfo(null);
-      });
-  }
+      for(var num = 0; num < response.data.length; num++)
+      {
+        var number = num +1;
+        document.write(number.toString());
+        document.write(" " + response.data[num].joke);
 
-  function getTypes() {
-    if (pokemonInfo !== undefined && pokemonInfo !== null) {
-      return pokemonInfo.types.map((item) => item.type.name);
-    }
-  }
-
-  function getAbilities() {
-    if (pokemonInfo !== undefined && pokemonInfo !== null) {
-      return pokemonInfo.abilities.map((ability) => ability.ability.name);
-    }
+        document.write("<br>");
+        document.write("<br>"); 
+      }
+      //@ts-ignore
+    }).catch(function (error) {
+      console.error(error);
+      document.write("Joke not found");
+    });
   }
 }
 
