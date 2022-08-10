@@ -1,5 +1,8 @@
 import './App.css';
 import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+import TextField from "@mui/material/TextField";
 
 function App() {
   // Declare a new state variable, which we'll call "pokemonName"
@@ -33,34 +36,56 @@ function App() {
       'X-RapidAPI-Host': 'webknox-jokes.p.rapidapi.com'
     }
   };
-
+  
   return (
-    <div>
+    
+    <div id = "page">
       <h1>Joke Databse</h1>
-
+      document.getElementById("page").style.textAlign = "center";
       <div>
-        <label>Keyword/ID: </label>
-        <input
-          type="text"
-          id="joke"
-          name="entered_joke"
-          onChange={(e) => setJoke(e.target.value)}
+        <TextField
+          id="search-bar"
+          className="text"
+          value={joke}
+          onChange={(prop: any) => {
+            setJoke(prop.target.value);
+          }}
+          label="Enter the joke keyword..."
+          variant="outlined"
+          placeholder="Search..."
+          size="small"
         />
+        <IconButton
+          aria-label="search"
+          onClick={() => {search();}}
+        >
+        <SearchIcon style={{ fill: "blue" }} />
+        </IconButton>
         <br/>
-        <label>Number of jokes: </label>
-        <input
-          type="int"
-          id="joke_number"
-          name="entered_number"
-          onChange={(e) => setJokeNumber(e.target.value)}
+        <TextField
+          id="search-bar"
+          className="text"
+          value={jokeNumber}
+          onChange={(prop: any) => {
+            setJokeNumber(prop.target.value);
+          }}
+          label="Enter the amout of jokes..."
+          variant="outlined"
+          placeholder="Search..."
+          size="small"
         />
-        <br/>
-        <br/>
-        <button onClick={search}>Search</button>
-        <br/>
-        <button onClick={random}>Get a Random Joke</button>
+        
+        <IconButton
+          aria-label="random"
+          onClick={() => {
+            random();
+          }}
+        >
+          <SearchIcon style={{ fill: "blue" }} />
+        </IconButton>
       </div>
     </div>
+    
   );
 
   function search() {
